@@ -1,98 +1,884 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#16b85b">
-  <title>What Game Masseg</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#075e45">
+
+    <title>WHAT GAME MASSEG</title>
+
+    <meta
+        name="description"
+        content="What Game Masseg - دردشة بأسماء المستخدمين وحقيقة أو تحدي."
+    >
+
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <div id="authView" class="auth-shell">
-    <section class="auth-card">
-      <div class="brand">
-        <div class="brand-mark"><img src="logo.png" alt="What Game Masseg" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><span class="fallback-mark">🎮</span></div>
-        <h1>What Game <span>Masseg</span></h1>
-        <p>دردش باسم مستخدمك — مش برقم تليفونك</p>
-      </div>
-      <div class="auth-tabs">
-        <button class="tab active" data-tab="login">تسجيل الدخول</button>
-        <button class="tab" data-tab="signup">إنشاء حساب</button>
-      </div>
-      <form id="loginForm" class="auth-form">
-        <label>البريد الإلكتروني<input id="loginEmail" type="email" autocomplete="email" required placeholder="name@example.com"></label>
-        <label>كلمة المرور<input id="loginPassword" type="password" autocomplete="current-password" minlength="8" required placeholder="8 أحرف على الأقل"></label>
-        <button class="primary-btn" type="submit">دخول إلى الموقع</button>
-      </form>
-      <form id="signupForm" class="auth-form hidden">
-        <label>اسم العرض<input id="displayName" required maxlength="40" placeholder="اسمك اللي هيظهر للناس"></label>
-        <label>اسم المستخدم الفريد<input id="username" required minlength="3" maxlength="20" pattern="[A-Za-z0-9_]+" placeholder="مثال: Mizo_2026"><small>إنجليزي وأرقام وشرطة سفلية فقط، من غير مسافات.</small></label>
-        <label>البريد الإلكتروني<input id="signupEmail" type="email" autocomplete="email" required placeholder="name@example.com"></label>
-        <label>كلمة المرور<input id="signupPassword" type="password" autocomplete="new-password" minlength="8" required placeholder="8 أحرف على الأقل"></label>
-        <label class="check-row"><input id="terms" type="checkbox" required> أوافق على قواعد الاستخدام والخصوصية.</label>
-        <button class="primary-btn" type="submit">إنشاء الحساب والدخول</button>
-      </form>
-      <div class="divider"><span>أو</span></div>
-      <button id="googleBtn" class="social-btn" type="button"><b class="google-g">G</b> المتابعة باستخدام Google</button>
-      <button id="appleBtn" class="social-btn" type="button"><b class="apple-logo">●</b> المتابعة باستخدام Apple</button>
-      <p class="prototype-note">نسخة تجريبية للواجهة. تسجيل Google وApple الحقيقي يحتاج إعداد مزوّد هوية وخادم آمن.</p>
-      <p id="authMessage" class="message" role="status"></p>
-    </section>
-  </div>
 
-  <div id="appView" class="app-shell hidden">
-    <aside class="sidebar">
-      <header class="side-header">
-        <div class="mini-brand"><img src="logo.png" alt="" onerror="this.style.display='none'"><strong>What Game Masseg</strong></div>
-        <button id="logoutBtn" class="icon-btn" title="تسجيل الخروج" aria-label="تسجيل الخروج">↪</button>
-      </header>
-      <div class="profile-strip">
-        <div class="avatar" id="myAvatar">م</div>
-        <div class="profile-info"><strong id="myDisplayName">مستخدم</strong><span id="myUsername">@user</span></div>
-        <span class="online-dot"></span>
-      </div>
-      <div class="search-wrap"><span>⌕</span><input id="searchInput" placeholder="ابحث في المحادثات"></div>
-      <div class="side-actions">
-        <button id="newChatBtn" class="small-action">＋ محادثة جديدة</button>
-        <button id="newGroupBtn" class="small-action">＋ مجموعة</button>
-      </div>
-      <div class="chat-list" id="chatList"></div>
-      <div class="sidebar-foot">المحادثات التجريبية محفوظة على هذا الجهاز فقط.</div>
-    </aside>
+    <!-- خلفية التحميل -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loader-logo">🎮</div>
+        <h2>WHAT GAME MASSEG</h2>
+        <div class="loader"></div>
+        <p>جاري تجهيز تجربتك...</p>
+    </div>
 
-    <main class="chat-panel">
-      <header class="chat-header">
-        <div class="chat-title-wrap">
-          <div class="avatar chat-avatar" id="activeAvatar">🎯</div>
-          <div><h2 id="activeTitle">حقيقة أو تحدي</h2><p id="activeSubtitle">اللعبة المثبتة • 100 سؤال</p></div>
+    <!-- رسائل التنبيه -->
+    <div
+        id="toastContainer"
+        class="toast-container"
+        aria-live="polite"
+    ></div>
+
+    <!-- =========================
+         نظام المصادقة الإجباري
+    ========================== -->
+
+    <section id="authScreen" class="auth-screen hidden">
+
+        <div class="auth-decoration decoration-one"></div>
+        <div class="auth-decoration decoration-two"></div>
+
+        <div class="auth-card">
+
+            <div class="brand">
+                <div class="brand-icon">
+                    <img
+                        src="logo.jpeg"
+                        alt="What Game Masseg"
+                        onerror="this.style.display='none';
+                        this.parentElement.classList.add('logo-fallback')"
+                    >
+                    <span class="fallback-icon">🎮</span>
+                </div>
+
+                <h1>WHAT GAME <span>MASSEG</span></h1>
+
+                <p class="brand-description">
+                    العب، اتكلم، واكتشف الحقيقة!
+                </p>
+            </div>
+
+            <!-- تبويبات الدخول والتسجيل -->
+
+            <div class="auth-tabs">
+                <button
+                    type="button"
+                    id="showLoginTab"
+                    class="auth-tab active"
+                >
+                    تسجيل الدخول
+                </button>
+
+                <button
+                    type="button"
+                    id="showRegisterTab"
+                    class="auth-tab"
+                >
+                    إنشاء حساب
+                </button>
+            </div>
+
+            <!-- نموذج تسجيل الدخول -->
+
+            <form id="loginForm" class="auth-form">
+
+                <div class="form-heading">
+                    <h2>أهلًا بعودتك 👋</h2>
+                    <p>سجل دخولك علشان تدخل عالم الشات.</p>
+                </div>
+
+                <label for="loginEmail">البريد الإلكتروني</label>
+
+                <div class="input-wrap">
+                    <span class="input-icon">✉</span>
+
+                    <input
+                        id="loginEmail"
+                        type="email"
+                        placeholder="name@example.com"
+                        autocomplete="email"
+                        required
+                    >
+                </div>
+
+                <label for="loginPassword">كلمة المرور</label>
+
+                <div class="input-wrap">
+                    <span class="input-icon">🔒</span>
+
+                    <input
+                        id="loginPassword"
+                        type="password"
+                        placeholder="اكتب كلمة المرور"
+                        autocomplete="current-password"
+                        minlength="8"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        data-toggle-password="loginPassword"
+                        aria-label="إظهار كلمة المرور"
+                    >
+                        👁
+                    </button>
+                </div>
+
+                <button
+                    type="button"
+                    id="forgotPasswordButton"
+                    class="text-button"
+                >
+                    نسيت كلمة المرور؟
+                </button>
+
+                <button
+                    type="submit"
+                    class="primary-button"
+                >
+                    <span>تسجيل الدخول</span>
+                    <span>←</span>
+                </button>
+
+                <div class="divider">
+                    <span>أو سجل باستخدام</span>
+                </div>
+
+                <div class="social-buttons">
+
+                    <button
+                        type="button"
+                        id="googleLoginButton"
+                        class="social-button"
+                    >
+                        <span class="google-symbol">G</span>
+                        Google
+                    </button>
+
+                    <button
+                        type="button"
+                        id="appleLoginButton"
+                        class="social-button"
+                    >
+                        <span>●</span>
+                        Apple
+                    </button>
+
+                </div>
+
+                <p class="auth-switch">
+                    معندكش حساب؟
+                    <button
+                        type="button"
+                        class="inline-button"
+                        data-open-register
+                    >
+                        أنشئ حساب جديد
+                    </button>
+                </p>
+
+            </form>
+
+            <!-- نموذج إنشاء الحساب -->
+
+            <form id="registerForm" class="auth-form hidden">
+
+                <div class="form-heading">
+                    <h2>انضم لعالمنا 🚀</h2>
+                    <p>أنشئ حسابك وابدأ تكلم أصحابك.</p>
+                </div>
+
+                <label for="registerName">اسم العرض</label>
+
+                <div class="input-wrap">
+                    <span class="input-icon">👤</span>
+
+                    <input
+                        id="registerName"
+                        type="text"
+                        placeholder="اسمك اللي هيظهر للناس"
+                        maxlength="40"
+                        autocomplete="name"
+                        required
+                    >
+                </div>
+
+                <label for="registerUsername">
+                    اسم المستخدم الفريد
+                </label>
+
+                <div class="input-wrap username-input">
+                    <span class="input-icon">@</span>
+
+                    <input
+                        id="registerUsername"
+                        type="text"
+                        placeholder="mizo123"
+                        minlength="3"
+                        maxlength="20"
+                        pattern="[A-Za-z0-9_]+"
+                        autocomplete="username"
+                        aria-describedby="usernameHelp"
+                        required
+                    >
+                </div>
+
+                <small id="usernameHelp" class="field-help">
+                    إنجليزي وأرقام وشرطة سفلية فقط، من 3 إلى 20 حرفًا.
+                </small>
+
+                <label for="registerEmail">
+                    البريد الإلكتروني
+                </label>
+
+                <div class="input-wrap">
+                    <span class="input-icon">✉</span>
+
+                    <input
+                        id="registerEmail"
+                        type="email"
+                        placeholder="name@example.com"
+                        autocomplete="email"
+                        required
+                    >
+                </div>
+
+                <label for="registerPassword">
+                    كلمة المرور
+                </label>
+
+                <div class="input-wrap">
+                    <span class="input-icon">🔒</span>
+
+                    <input
+                        id="registerPassword"
+                        type="password"
+                        placeholder="8 أحرف على الأقل"
+                        minlength="8"
+                        autocomplete="new-password"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        data-toggle-password="registerPassword"
+                        aria-label="إظهار كلمة المرور"
+                    >
+                        👁
+                    </button>
+                </div>
+
+                <label for="confirmPassword">
+                    تأكيد كلمة المرور
+                </label>
+
+                <div class="input-wrap">
+                    <span class="input-icon">🔐</span>
+
+                    <input
+                        id="confirmPassword"
+                        type="password"
+                        placeholder="اكتب كلمة المرور مرة أخرى"
+                        minlength="8"
+                        autocomplete="new-password"
+                        required
+                    >
+                </div>
+
+                <label class="checkbox-row">
+                    <input
+                        type="checkbox"
+                        id="acceptTerms"
+                        required
+                    >
+
+                    <span>
+                        أوافق على شروط الاستخدام وسياسة الخصوصية.
+                    </span>
+                </label>
+
+                <button
+                    type="submit"
+                    class="primary-button"
+                >
+                    <span>إنشاء حساب جديد</span>
+                    <span>🚀</span>
+                </button>
+
+                <p class="auth-switch">
+                    عندك حساب بالفعل؟
+                    <button
+                        type="button"
+                        class="inline-button"
+                        data-open-login
+                    >
+                        سجل دخولك
+                    </button>
+                </p>
+
+            </form>
+
+            <div class="auth-security">
+                <span>🛡️</span>
+                <span>
+                    لا تشارك كلمة مرورك مع أي شخص.
+                </span>
+            </div>
+
+            <p class="demo-notice">
+                نسخة تجريبية محلية — تسجيل Google وApple الحقيقي
+                يحتاج إعداد خدمة المصادقة.
+            </p>
+
         </div>
-        <div class="header-tools"><button id="showGameBtn" class="icon-btn" title="حقيقة أو تحدي">🎲</button><button id="clearChatBtn" class="icon-btn" title="مسح المحادثة">⌫</button></div>
-      </header>
-      <div class="notice"><span>🔒</span> نموذج واجهة فقط — لا ترسل بيانات حساسة. التشفير الكامل غير مفعّل في هذه النسخة.</div>
-      <section id="messages" class="messages" aria-live="polite"></section>
-      <div id="gameBar" class="game-bar">
-        <div><strong>🎲 حقيقة أو تحدي</strong><span>اختار سؤال عشوائي وشارك إجابتك في الشات</span></div>
-        <button id="randomQuestionBtn" class="primary-btn compact">سؤال عشوائي</button>
-      </div>
-      <form id="messageForm" class="composer">
-        <button type="button" id="emojiBtn" class="icon-btn" aria-label="إيموجي">☺</button>
-        <input id="messageInput" autocomplete="off" placeholder="اكتب رسالة..." maxlength="2000">
-        <button type="submit" class="send-btn" aria-label="إرسال">➤</button>
-      </form>
-      <p class="expiry-hint">في النسخة النهائية يجب ضبط حذف الرسائل بعد 12 ساعة من الخادم، وليس من المتصفح فقط.</p>
-    </main>
-  </div>
 
-  <dialog id="promptDialog" class="modal">
-    <form method="dialog" class="modal-content">
-      <button class="modal-close" aria-label="إغلاق">×</button>
-      <h3 id="dialogTitle">محادثة جديدة</h3>
-      <p id="dialogHelp">اكتب اسم المستخدم كما يظهر في الموقع.</p>
-      <label id="dialogLabel">اسم المستخدم<input id="dialogInput" autocomplete="off" placeholder="username"></label>
-      <div class="modal-actions"><button class="secondary-btn" value="cancel">إلغاء</button><button id="dialogConfirm" class="primary-btn" value="default">متابعة</button></div>
-      <p id="dialogMessage" class="message"></p>
-    </form>
-  </dialog>
-  <script src="app.js"></script>
+    </section>
+
+
+    <!-- =========================
+         التطبيق الرئيسي
+         مخفي قبل تسجيل الدخول
+    ========================== -->
+
+    <main id="appScreen" class="app-screen hidden">
+
+        <!-- الشريط الجانبي -->
+
+        <aside id="sidebar" class="sidebar">
+
+            <header class="sidebar-header">
+
+                <div class="mini-brand">
+
+                    <div class="mini-logo">
+                        <img
+                            src="logo.jpeg"
+                            alt=""
+                            onerror="this.style.display='none'"
+                        >
+                        <span>🎮</span>
+                    </div>
+
+                    <div>
+                        <h1>WHAT GAME</h1>
+                        <small>MASSEG</small>
+                    </div>
+
+                </div>
+
+                <button
+                    id="openProfileButton"
+                    class="icon-button"
+                    title="حسابي"
+                    aria-label="حسابي"
+                >
+                    👤
+                </button>
+
+            </header>
+
+            <!-- بيانات المستخدم -->
+
+            <div class="current-user-card">
+
+                <div id="currentUserAvatar" class="avatar">
+                    M
+                </div>
+
+                <div class="current-user-info">
+                    <strong id="currentUserName">مستخدم</strong>
+                    <span id="currentUsername">@username</span>
+                    <small class="online-indicator">
+                        <span></span> متصل
+                    </small>
+                </div>
+
+                <button
+                    id="logoutButton"
+                    class="icon-button logout-icon"
+                    title="تسجيل الخروج"
+                    aria-label="تسجيل الخروج"
+                >
+                    ↪
+                </button>
+
+            </div>
+
+            <!-- البحث -->
+
+            <div class="search-box">
+
+                <span>⌕</span>
+
+                <input
+                    type="search"
+                    id="searchChats"
+                    placeholder="ابحث في المحادثات..."
+                    autocomplete="off"
+                >
+
+                <button
+                    id="clearSearch"
+                    type="button"
+                    aria-label="مسح البحث"
+                >
+                    ×
+                </button>
+
+            </div>
+
+            <!-- أزرار المحادثات -->
+
+            <div class="sidebar-actions">
+
+                <button
+                    id="newChatButton"
+                    class="secondary-button"
+                >
+                    <span>✉</span>
+                    محادثة جديدة
+                </button>
+
+                <button
+                    id="newGroupButton"
+                    class="secondary-button"
+                >
+                    <span>👥</span>
+                    إنشاء جروب
+                </button>
+
+            </div>
+
+            <!-- التصنيفات -->
+
+            <div class="chat-filters">
+
+                <button
+                    class="filter-button active"
+                    data-filter="all"
+                >
+                    الكل
+                </button>
+
+                <button
+                    class="filter-button"
+                    data-filter="unread"
+                >
+                    غير مقروءة
+                </button>
+
+                <button
+                    class="filter-button"
+                    data-filter="groups"
+                >
+                    الجروبات
+                </button>
+
+            </div>
+
+            <div class="section-title">
+                <span>المحادثات</span>
+                <span id="chatCount">0</span>
+            </div>
+
+            <div
+                id="chatList"
+                class="chat-list"
+                aria-label="قائمة المحادثات"
+            ></div>
+
+            <footer class="sidebar-footer">
+                <span class="footer-dot"></span>
+                What Game Masseg
+                <span>نسخة تجريبية</span>
+            </footer>
+
+        </aside>
+
+
+        <!-- مساحة المحادثة -->
+
+        <section class="chat-panel">
+
+            <header class="chat-header">
+
+                <button
+                    id="mobileBackButton"
+                    class="icon-button mobile-back"
+                    aria-label="العودة للمحادثات"
+                >
+                    →
+                </button>
+
+                <div id="activeChatAvatar" class="avatar chat-avatar">
+                    🎮
+                </div>
+
+                <div class="chat-header-info">
+
+                    <h2 id="activeChatTitle">
+                        أهلًا بيك في What Game Masseg
+                    </h2>
+
+                    <p id="activeChatSubtitle">
+                        اختار محادثة من القائمة
+                    </p>
+
+                </div>
+
+                <div class="chat-header-actions">
+
+                    <button
+                        id="pinChatButton"
+                        class="icon-button"
+                        title="تثبيت المحادثة"
+                        aria-label="تثبيت المحادثة"
+                    >
+                        📌
+                    </button>
+
+                    <button
+                        id="chatInfoButton"
+                        class="icon-button"
+                        title="معلومات المحادثة"
+                        aria-label="معلومات المحادثة"
+                    >
+                        ⋮
+                    </button>
+
+                </div>
+
+            </header>
+
+
+            <!-- شريط انتهاء المحادثة -->
+
+            <div
+                id="expirationBanner"
+                class="expiration-banner hidden"
+            >
+                <span>⏳</span>
+
+                <span id="expirationText">
+                    الرسائل مؤقتة في هذه المحادثة.
+                </span>
+            </div>
+
+
+            <!-- محتوى الرسائل -->
+
+            <div
+                id="messagesArea"
+                class="messages-area"
+                aria-live="polite"
+            >
+
+                <div id="welcomePanel" class="welcome-panel">
+
+                    <div class="welcome-logo">
+                        <img
+                            src="logo.jpeg"
+                            alt="What Game Masseg"
+                            onerror="this.style.display='none'"
+                        >
+                        <span>🎮</span>
+                    </div>
+
+                    <h2>أهلًا بيك في عالمك الجديد!</h2>
+
+                    <p>
+                        اتكلم مع أصحابك باسم المستخدم،
+                        أو ابدأ تحدي جديد.
+                    </p>
+
+                    <div class="welcome-features">
+
+                        <div>
+                            <span>💬</span>
+                            <strong>شات خاص</strong>
+                            <small>محادثات بالأسماء</small>
+                        </div>
+
+                        <div>
+                            <span>🎯</span>
+                            <strong>حقيقة أو تحدي</strong>
+                            <small>100 سؤال عشوائي</small>
+                        </div>
+
+                        <div>
+                            <span>👥</span>
+                            <strong>الجروبات</strong>
+                            <small>اجمع أصحابك</small>
+                        </div>
+
+                    </div>
+
+                    <button
+                        id="welcomeNewChat"
+                        class="primary-button welcome-button"
+                    >
+                        ابدأ محادثة جديدة
+                    </button>
+
+                </div>
+
+                <div
+                    id="messagesList"
+                    class="messages-list hidden"
+                ></div>
+
+            </div>
+
+
+            <!-- لوحة حقيقة أو تحدي -->
+
+            <section
+                id="truthPanel"
+                class="truth-panel hidden"
+            >
+
+                <div class="truth-panel-header">
+                    <div>
+                        <span class="truth-icon">🎯</span>
+
+                        <div>
+                            <h3>حقيقة أو تحدي</h3>
+                            <p>اختار سؤالًا عشوائيًا</p>
+                        </div>
+                    </div>
+
+                    <button
+                        id="closeTruthPanel"
+                        class="icon-button"
+                        aria-label="إغلاق"
+                    >
+                        ×
+                    </button>
+                </div>
+
+                <div class="truth-tabs">
+
+                    <button
+                        id="truthModeButton"
+                        class="truth-mode active"
+                        data-mode="truth"
+                    >
+                        🤔 حقيقة
+                    </button>
+
+                    <button
+                        id="dareModeButton"
+                        class="truth-mode"
+                        data-mode="dare"
+                    >
+                        🎲 تحدي
+                    </button>
+
+                </div>
+
+                <div class="truth-question-card">
+
+                    <span id="questionNumber">سؤال عشوائي</span>
+
+                    <p id="questionText">
+                        اضغط على الزر للحصول على سؤال.
+                    </p>
+
+                    <button
+                        id="nextQuestionButton"
+                        class="primary-button"
+                    >
+                        سؤال جديد 🎲
+                    </button>
+
+                    <button
+                        id="sendQuestionButton"
+                        class="secondary-button"
+                    >
+                        إرسال السؤال للشات
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- أدوات الكتابة -->
+
+            <form id="messageForm" class="message-composer hidden">
+
+                <button
+                    type="button"
+                    id="emojiButton"
+                    class="icon-button composer-icon"
+                    title="إيموجي"
+                >
+                    ☺
+                </button>
+
+                <button
+                    type="button"
+                    id="truthButton"
+                    class="icon-button composer-icon truth-trigger"
+                    title="حقيقة أو تحدي"
+                >
+                    🎯
+                </button>
+
+                <textarea
+                    id="messageInput"
+                    rows="1"
+                    maxlength="4000"
+                    placeholder="اكتب رسالتك هنا..."
+                    aria-label="اكتب رسالتك"
+                ></textarea>
+
+                <button
+                    type="submit"
+                    id="sendMessageButton"
+                    class="send-button"
+                    aria-label="إرسال الرسالة"
+                >
+                    ➤
+                </button>
+
+            </form>
+
+            <div
+                id="composerNotice"
+                class="composer-notice hidden"
+            >
+                المحادثات هنا تجريبية ومحفوظة على هذا الجهاز فقط.
+            </div>
+
+        </section>
+
+
+        <!-- لوحة تفاصيل المحادثة -->
+
+        <aside id="detailsPanel" class="details-panel hidden">
+
+            <div class="details-header">
+
+                <h3>معلومات المحادثة</h3>
+
+                <button
+                    id="closeDetailsButton"
+                    class="icon-button"
+                    aria-label="إغلاق"
+                >
+                    ×
+                </button>
+
+            </div>
+
+            <div class="details-content">
+
+                <div id="detailsAvatar" class="avatar details-avatar">
+                    🎮
+                </div>
+
+                <h3 id="detailsTitle">المحادثة</h3>
+                <p id="detailsSubtitle">معلومات المحادثة</p>
+
+                <div class="details-stat">
+                    <span>عدد الرسائل</span>
+                    <strong id="detailsMessageCount">0</strong>
+                </div>
+
+                <div class="details-stat">
+                    <span>نوع المحادثة</span>
+                    <strong id="detailsType">خاص</strong>
+                </div>
+
+                <div class="details-stat">
+                    <span>حالة التثبيت</span>
+                    <strong id="detailsPinned">غير مثبتة</strong>
+                </div>
+
+                <button
+                    id="detailsPinButton"
+                    class="secondary-button full-width"
+                >
+                    تثبيت / إلغاء التثبيت
+                </button>
+
+                <button
+                    id="exportBackupButton"
+                    class="secondary-button full-width"
+                >
+                    تنزيل نسخة احتياطية
+                </button>
+
+                <button
+                    id="deleteChatButton"
+                    class="danger-button full-width"
+                >
+                    حذف المحادثة التجريبية
+                </button>
+
+                <p class="details-warning">
+                    النسخة الاحتياطية لا تُرسل تلقائيًا إلى البريد
+                    أو Google أو Apple في هذه النسخة.
+                </p>
+
+            </div>
+
+        </aside>
+
+    </main>
+
+
+    <!-- =========================
+         النوافذ المنبثقة
+    ========================== -->
+
+    <div
+        id="modalBackdrop"
+        class="modal-backdrop hidden"
+        role="presentation"
+    >
+
+        <section
+            id="appModal"
+            class="app-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modalTitle"
+        >
+
+            <header class="modal-header">
+
+                <h2 id="modalTitle">عنوان النافذة</h2>
+
+                <button
+                    type="button"
+                    id="closeModalButton"
+                    class="icon-button"
+                    aria-label="إغلاق النافذة"
+                >
+                    ×
+                </button>
+
+            </header>
+
+            <div id="modalBody" class="modal-body"></div>
+
+        </section>
+
+    </div>
+
+
+    <!-- =========================
+         إعدادات التطبيق
+    ========================== -->
+
+    <script src="app.js"></script>
+
 </body>
-</html>
+                                        </html>
