@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#16b85b">
+  <title>What Game Masseg</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="authView" class="auth-shell">
+    <section class="auth-card">
+      <div class="brand">
+        <div class="brand-mark"><img src="logo.png" alt="What Game Masseg" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><span class="fallback-mark">🎮</span></div>
+        <h1>What Game <span>Masseg</span></h1>
+        <p>دردش باسم مستخدمك — مش برقم تليفونك</p>
+      </div>
+      <div class="auth-tabs">
+        <button class="tab active" data-tab="login">تسجيل الدخول</button>
+        <button class="tab" data-tab="signup">إنشاء حساب</button>
+      </div>
+      <form id="loginForm" class="auth-form">
+        <label>البريد الإلكتروني<input id="loginEmail" type="email" autocomplete="email" required placeholder="name@example.com"></label>
+        <label>كلمة المرور<input id="loginPassword" type="password" autocomplete="current-password" minlength="8" required placeholder="8 أحرف على الأقل"></label>
+        <button class="primary-btn" type="submit">دخول إلى الموقع</button>
+      </form>
+      <form id="signupForm" class="auth-form hidden">
+        <label>اسم العرض<input id="displayName" required maxlength="40" placeholder="اسمك اللي هيظهر للناس"></label>
+        <label>اسم المستخدم الفريد<input id="username" required minlength="3" maxlength="20" pattern="[A-Za-z0-9_]+" placeholder="مثال: Mizo_2026"><small>إنجليزي وأرقام وشرطة سفلية فقط، من غير مسافات.</small></label>
+        <label>البريد الإلكتروني<input id="signupEmail" type="email" autocomplete="email" required placeholder="name@example.com"></label>
+        <label>كلمة المرور<input id="signupPassword" type="password" autocomplete="new-password" minlength="8" required placeholder="8 أحرف على الأقل"></label>
+        <label class="check-row"><input id="terms" type="checkbox" required> أوافق على قواعد الاستخدام والخصوصية.</label>
+        <button class="primary-btn" type="submit">إنشاء الحساب والدخول</button>
+      </form>
+      <div class="divider"><span>أو</span></div>
+      <button id="googleBtn" class="social-btn" type="button"><b class="google-g">G</b> المتابعة باستخدام Google</button>
+      <button id="appleBtn" class="social-btn" type="button"><b class="apple-logo">●</b> المتابعة باستخدام Apple</button>
+      <p class="prototype-note">نسخة تجريبية للواجهة. تسجيل Google وApple الحقيقي يحتاج إعداد مزوّد هوية وخادم آمن.</p>
+      <p id="authMessage" class="message" role="status"></p>
+    </section>
+  </div>
+
+  <div id="appView" class="app-shell hidden">
+    <aside class="sidebar">
+      <header class="side-header">
+        <div class="mini-brand"><img src="logo.png" alt="" onerror="this.style.display='none'"><strong>What Game Masseg</strong></div>
+        <button id="logoutBtn" class="icon-btn" title="تسجيل الخروج" aria-label="تسجيل الخروج">↪</button>
+      </header>
+      <div class="profile-strip">
+        <div class="avatar" id="myAvatar">م</div>
+        <div class="profile-info"><strong id="myDisplayName">مستخدم</strong><span id="myUsername">@user</span></div>
+        <span class="online-dot"></span>
+      </div>
+      <div class="search-wrap"><span>⌕</span><input id="searchInput" placeholder="ابحث في المحادثات"></div>
+      <div class="side-actions">
+        <button id="newChatBtn" class="small-action">＋ محادثة جديدة</button>
+        <button id="newGroupBtn" class="small-action">＋ مجموعة</button>
+      </div>
+      <div class="chat-list" id="chatList"></div>
+      <div class="sidebar-foot">المحادثات التجريبية محفوظة على هذا الجهاز فقط.</div>
+    </aside>
+
+    <main class="chat-panel">
+      <header class="chat-header">
+        <div class="chat-title-wrap">
+          <div class="avatar chat-avatar" id="activeAvatar">🎯</div>
+          <div><h2 id="activeTitle">حقيقة أو تحدي</h2><p id="activeSubtitle">اللعبة المثبتة • 100 سؤال</p></div>
+        </div>
+        <div class="header-tools"><button id="showGameBtn" class="icon-btn" title="حقيقة أو تحدي">🎲</button><button id="clearChatBtn" class="icon-btn" title="مسح المحادثة">⌫</button></div>
+      </header>
+      <div class="notice"><span>🔒</span> نموذج واجهة فقط — لا ترسل بيانات حساسة. التشفير الكامل غير مفعّل في هذه النسخة.</div>
+      <section id="messages" class="messages" aria-live="polite"></section>
+      <div id="gameBar" class="game-bar">
+        <div><strong>🎲 حقيقة أو تحدي</strong><span>اختار سؤال عشوائي وشارك إجابتك في الشات</span></div>
+        <button id="randomQuestionBtn" class="primary-btn compact">سؤال عشوائي</button>
+      </div>
+      <form id="messageForm" class="composer">
+        <button type="button" id="emojiBtn" class="icon-btn" aria-label="إيموجي">☺</button>
+        <input id="messageInput" autocomplete="off" placeholder="اكتب رسالة..." maxlength="2000">
+        <button type="submit" class="send-btn" aria-label="إرسال">➤</button>
+      </form>
+      <p class="expiry-hint">في النسخة النهائية يجب ضبط حذف الرسائل بعد 12 ساعة من الخادم، وليس من المتصفح فقط.</p>
+    </main>
+  </div>
+
+  <dialog id="promptDialog" class="modal">
+    <form method="dialog" class="modal-content">
+      <button class="modal-close" aria-label="إغلاق">×</button>
+      <h3 id="dialogTitle">محادثة جديدة</h3>
+      <p id="dialogHelp">اكتب اسم المستخدم كما يظهر في الموقع.</p>
+      <label id="dialogLabel">اسم المستخدم<input id="dialogInput" autocomplete="off" placeholder="username"></label>
+      <div class="modal-actions"><button class="secondary-btn" value="cancel">إلغاء</button><button id="dialogConfirm" class="primary-btn" value="default">متابعة</button></div>
+      <p id="dialogMessage" class="message"></p>
+    </form>
+  </dialog>
+  <script src="app.js"></script>
+</body>
+</html>
